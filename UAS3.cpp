@@ -7,8 +7,9 @@
 using namespace std;
 
 // Deklarasi Variable Global
-int tmp,pilih,jm_masuk,jm_keluar,durasi,biaya,harga_kendaraan,uang,kembalian,in_nop,jumlahParkir=0;
+int tot_biaya,tmp,pilih,jm_masuk,jm_keluar,durasi,biaya,harga_kendaraan,uang,kembalian,in_nop,jumlahParkir=0,selc_mobil,selc_motor,selc_bus,selc_truck;
 string waktuString,nomorPlat,jenis_kendaraan[4] = {"Motor \t Rp.2000","Mobil \t Rp.4000","Truck \t Rp.6000","Bus   \t Rp.8000"};
+char* waktu;
 
 // membuat function kendaraan
 void kendaraan(){
@@ -18,27 +19,16 @@ void kendaraan(){
     }
 }
 
-void waktu(){
-    // Mendapatkan waktu saat ini
-    time_t currentTime = time(0);
-    tm *localTime = localtime(&currentTime);
-
-    // Membuat objek ostringstream untuk menyimpan output waktu
-    ostringstream oss;
-
-    // Menyimpan output waktu ke dalam ostringstream
-    oss << "|       " << asctime(localTime);
-
-    // Mendapatkan string dari ostringstream
-    waktuString = oss.str();
-
-    cout<<waktuString << left << setw(21) << "|\n";
+void tanggal(){
+    time_t now = time(0);
+    waktu = ctime(&now);
+    cout << "|         " << waktu;
 }
 
 void struk_parkir(){
     cout << "-----------------------------------------------\n";
-	cout << "|             Struk Karcis Parkir             |\n";                     
-    waktu();
+	cout << "|             Struk Karcis Parkir             |\n";         
+    tanggal();           
 	cout << "-----------------------------------------------\n";
 	cout << "|Jenis Kendaraan : " << left << setw(21) << jenis_kendaraan[pilih] << "|\n";
     cout << "|Nomor Plat      : " << left << setw(27) << nomorPlat << "|\n";
@@ -66,9 +56,11 @@ void menghitung_biaya(){
         durasi = jm_keluar - jm_masuk;
         biaya = durasi * harga_kendaraan;
 
+        cout<<"Biaya Parkir \t: Rp." << biaya << endl;
         cout<<"Masukan Nominal Uang \t: ";
         cin >> uang;
         kembalian = uang - biaya;
+        tot_biaya += biaya;
 
        struk_parkir();
 
@@ -96,18 +88,22 @@ void pembayaranKarcis(){
     switch (pilih) {
         case 1:
             jenis_kendaraan[0];
+            selc_motor += 1;
             harga_kendaraan = 2000;
             break;
         case 2:
             jenis_kendaraan[1];
+            selc_mobil += 1;
             harga_kendaraan = 4000;
             break;
         case 3:
             jenis_kendaraan[2];
+            selc_truck += 1;
             harga_kendaraan = 6000;
             break;
         case 4 :
             jenis_kendaraan[3];
+            selc_bus += 1;
             harga_kendaraan = 8000;
             break;
         default :
@@ -140,18 +136,24 @@ void pencarianNomorKendaraan(){
 }
 
 void tampilkanDataParkir() {
-    cout << "\nData Parkir:\n";
-    for (int i = 0; i < jumlahParkir; ++i) {
-        struk_parkir();
-    }
-}
-
-void urutkanDataParkir() {
     int pilihan;
-    cout << "Pilih Filter Pengurutan (1. Terbaru, 2. Terlama): ";
+    cout << "Pilih Filter Pengurutan Data Parkir (1. Terbaru, 2. Terlama): ";
     cin >> pilihan;
   
 	//mengurutkan data parkir berdasarkan waktu selesai parkir
+    switch (pilihan) {
+    case 1:
+        for (int i = 0; i < jumlahParkir; ++i) {
+            struk_parkir();
+         }
+        break;
+    case 2:
+        // data terlama
+        break;
+    default:
+        cout<<"Pilih Filter Pengurutan";
+        break;
+    }
 
 }
 
@@ -159,11 +161,11 @@ void totalhariini(){
     cout << "-----------------------------------------------\n";
 	cout << "|       Total Parkir Hari Ini (tanggal)             |\n";                     
 	cout << "-----------------------------------------------\n";
-	cout << "|Motor : " << left << setw(21) <<  << "|\n";
-    cout << "|Mobil : " << left << setw(21) <<  << "|\n";
-    cout << "|Bus : " << left << setw(21) <<  << "|\n";
-    cout << "|Truck : " << left << setw(21) <<  << "|\n";
-    cout << "|Total Parkir    : Rp." << left << setw(24) <<biaya << "|\n";
+	cout << "|Motor : " << left << setw(21) << selc_motor << "|\n";
+    cout << "|Mobil : " << left << setw(21) << selc_mobil << "|\n";
+    cout << "|Bus : " << left << setw(21) << selc_bus << "|\n";
+    cout << "|Truck : " << left << setw(21) << selc_truck << "|\n";
+    cout << "|Total Parkir    : Rp." << left << setw(24) <<tot_biaya << "|\n";
     cout << "-----------------------------------------------\n";
 }
 
