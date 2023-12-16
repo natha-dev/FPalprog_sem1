@@ -8,6 +8,7 @@
 using namespace std;
 
 struct Parkir {
+    int jenisKendaraan;
     string nomorPlat;
     int jm_masuk;
     int jm_keluar;
@@ -20,15 +21,22 @@ const int MAX_PARKIR = 100; // set maksimal jumlah data
 Parkir dataParkir[MAX_PARKIR];
 
 // Deklarasi Variable Global
-int tot_biaya,pilih,jm_masuk,jm_keluar,durasi,biaya,harga_kendaraan,uang,kembalian,jumlahParkir=0,selc_mobil,selc_motor,selc_bus,selc_truck;
-string nomorPlat,jenis_kendaraan[4] = {"Motor \t Rp.2000","Mobil \t Rp.4000","Truck \t Rp.6000","Bus   \t Rp.8000"};
+int jenisKendaraan,tot_biaya,pilih,jm_masuk,jm_keluar,durasi,biaya,harga_kendaraan,uang,kembalian,jumlahParkir=0,selc_mobil,selc_motor,selc_bus,selc_truck;
+string nomorPlat;
 char* waktu;
 
-// membuat function kendaraan
-void kendaraan(){
-    // Menampilkan Array jenis_kendaraan
-    for (int i = 0; i <= 3;i++){
-        cout << "["<< i+1 <<"]" << jenis_kendaraan[i] << endl;
+string getJenisKendaraanString(int jenisKendaraan) {
+    switch (jenisKendaraan) {
+        case 1:
+            return "Motor";
+        case 2:
+            return "Mobil";
+        case 3:
+            return "Truk";
+        case 4:
+            break;
+        default :
+            cout << "Opsi Kendaraan tidak Valid\n";
     }
 }
 
@@ -58,17 +66,17 @@ void menghitung_biaya(){
         kembalian = uang - biaya;
         tot_biaya += biaya;
 
-        dataParkir[jumlahParkir++] = {nomorPlat, jm_masuk, jm_keluar,biaya,uang,kembalian};
+        dataParkir[jumlahParkir++] = {jenisKendaraan,nomorPlat, jm_masuk, jm_keluar,biaya,uang,kembalian};
 
         cout << "-----------------------------------------------\n";
         cout << "|             Struk Karcis Parkir             |\n";
-        tanggal();
         cout << "-----------------------------------------------\n";
-        cout << "|Jenis Kendaraan : " << left << setw(21) << jenis_kendaraan[pilih - 1] << "|\n";
+        cout << "|Jenis Kendaraan : " << left << setw(27) << getJenisKendaraanString(jenisKendaraan) << "|\n";
         cout << "|Nomor Plat      : " << left << setw(27) << nomorPlat << "|\n";
         cout << "|Jam Masuk       : " << left << setw(27) << jm_masuk << "|\n";
         cout << "|Jam Keluar      : " << left << setw(27) << jm_keluar << "|\n";
         cout << "-----------------------------------------------\n";
+        cout << "|Biaya Perjam    : Rp." << left << setw(24) <<harga_kendaraan << "|\n";
         cout << "|Biaya Parkir    : Rp." << left << setw(24) <<biaya << "|\n";
         cout << "-----------------------------------------------\n";
         cout << "|Bayar           : " << left << setw(27) << uang << "|\n";
@@ -88,38 +96,34 @@ void menghitung_biaya(){
 
 // membuat function pembayaranKarcis
 void pembayaranKarcis(){
-    cout<<"=========================================\n";
-    kendaraan();
-    cout<<"=========================================\n";
-    cout<<"Pilih Kendaraan : ";
-    cin >> pilih;
+    cout << "[1]Motor    \tRp.2000 perJam\n";
+    cout << "[2]Mobil \tRp.4000 perJam\n";
+    cout << "[3]Truk \tRp.6000 perJam\n";
+    cout << "[4]Bus \t\tRp.8000 perJam\n";
+    cout << "Masukan Jenis Kendaraan : ";
+    cin >> jenisKendaraan;
 
-    // membuat percabangan untuk memilih jenis kendaraan
-    switch (pilih) {
+    switch (jenisKendaraan) {
         case 1:
-            jenis_kendaraan[0];
             selc_motor += 1;
             harga_kendaraan = 2000;
             break;
         case 2:
-            jenis_kendaraan[1];
             selc_mobil += 1;
             harga_kendaraan = 4000;
             break;
         case 3:
-            jenis_kendaraan[2];
             selc_truck += 1;
             harga_kendaraan = 6000;
             break;
-        case 4 :
-            jenis_kendaraan[3];
+        case 4:
             selc_bus += 1;
             harga_kendaraan = 8000;
             break;
         default :
             cout << "Opsi Kendaraan tidak Valid\n";
-            pembayaranKarcis();
     }
+
     menghitung_biaya();
 
 }
@@ -133,17 +137,17 @@ void pencarianNomorKendaraan(){
         if (dataParkir[i].nomorPlat.find(searchPlat) != string::npos){
             cout << "-----------------------------------------------\n";
             cout << "|             Struk Karcis Parkir             |\n";
-            tanggal();
             cout << "-----------------------------------------------\n";
-            cout << "|Jenis Kendaraan : " << left << setw(21) << jenis_kendaraan[pilih - 1] << "|\n";
-            cout << "|Nomor Plat      : " << left << setw(27) << nomorPlat << "|\n";
-            cout << "|Jam Masuk       : " << left << setw(27) << jm_masuk << "|\n";
-            cout << "|Jam Keluar      : " << left << setw(27) << jm_keluar << "|\n";
+            cout << "|Jenis Kendaraan : " << left << setw(27) << getJenisKendaraanString(dataParkir[i].jenisKendaraan) << "|\n";
+            cout << "|Nomor Plat      : " << left << setw(27) << dataParkir[i].nomorPlat << "|\n";
+            cout << "|Jam Masuk       : " << left << setw(27) << dataParkir[i].jm_masuk << "|\n";
+            cout << "|Jam Keluar      : " << left << setw(27) << dataParkir[i].jm_keluar << "|\n";
             cout << "-----------------------------------------------\n";
-            cout << "|Biaya Parkir    : Rp." << left << setw(24) <<biaya << "|\n";
+            cout << "|Biaya Perjam    : Rp." << left << setw(24) <<harga_kendaraan << "|\n";
+            cout << "|Biaya Parkir    : Rp." << left << setw(24) <<dataParkir[i].biaya << "|\n";
             cout << "-----------------------------------------------\n";
-            cout << "|Bayar           : " << left << setw(27) << uang << "|\n";
-            cout << "|Kembalian       : " << left << setw(27) << kembalian << "|\n";
+            cout << "|Bayar           : " << left << setw(27) << dataParkir[i].uang << "|\n";
+            cout << "|Kembalian       : " << left << setw(27) << dataParkir[i].kembalian << "|\n";
             cout << "-----------------------------------------------\n";
         }
     }
@@ -154,13 +158,13 @@ void struct_parkir(){
     for (int i = 0; i < jumlahParkir; ++i) {
         cout << "-----------------------------------------------\n";
         cout << "|             Struk Karcis Parkir             |\n";
-        tanggal();
         cout << "-----------------------------------------------\n";
-        cout << "|Jenis Kendaraan : " << left << setw(21) << jenis_kendaraan[pilih - 1] << "|\n";
+        cout << "|Jenis Kendaraan : " << left << setw(27) << getJenisKendaraanString(dataParkir[i].jenisKendaraan) << "|\n";
         cout << "|Nomor Plat      : " << left << setw(27) << dataParkir[i].nomorPlat << "|\n";
         cout << "|Jam Masuk       : " << left << setw(27) << dataParkir[i].jm_masuk << "|\n";
         cout << "|Jam Keluar      : " << left << setw(27) << dataParkir[i].jm_keluar << "|\n";
         cout << "-----------------------------------------------\n";
+        cout << "|Biaya Perjam    : Rp." << left << setw(24) <<harga_kendaraan << "|\n";
         cout << "|Biaya Parkir    : Rp." << left << setw(24) <<dataParkir[i].biaya << "|\n";
         cout << "-----------------------------------------------\n";
         cout << "|Bayar           : " << left << setw(27) << dataParkir[i].uang << "|\n";
