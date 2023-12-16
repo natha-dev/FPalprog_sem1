@@ -3,12 +3,25 @@
 #include <iomanip>
 #include <string>
 #include <ctime>
+#include <algorithm>
 
 using namespace std;
 
+struct Parkir {
+    string nomorPlat;
+    int jm_masuk;
+    int jm_keluar;
+    int biaya;
+    int uang;
+    int kembalian;
+};
+
+const int MAX_PARKIR = 100; // set maksimal jumlah data
+Parkir dataParkir[MAX_PARKIR];
+
 // Deklarasi Variable Global
-int tot_biaya,tmp,pilih,jm_masuk,jm_keluar,durasi,biaya,harga_kendaraan,uang,kembalian,in_nop,jumlahParkir=0,selc_mobil,selc_motor,selc_bus,selc_truck;
-string waktuString,nomorPlat,jenis_kendaraan[4] = {"Motor \t Rp.2000","Mobil \t Rp.4000","Truck \t Rp.6000","Bus   \t Rp.8000"};
+int tot_biaya,pilih,jm_masuk,jm_keluar,durasi,biaya,harga_kendaraan,uang,kembalian,jumlahParkir=0,selc_mobil,selc_motor,selc_bus,selc_truck;
+string nomorPlat,jenis_kendaraan[4] = {"Motor \t Rp.2000","Mobil \t Rp.4000","Truck \t Rp.6000","Bus   \t Rp.8000"};
 char* waktu;
 
 // membuat function kendaraan
@@ -23,23 +36,6 @@ void tanggal(){
     time_t now = time(0);
     waktu = ctime(&now);
     cout << "|         " << waktu;
-}
-
-void struk_parkir(){
-    cout << "-----------------------------------------------\n";
-	cout << "|             Struk Karcis Parkir             |\n";         
-    tanggal();           
-	cout << "-----------------------------------------------\n";
-	cout << "|Jenis Kendaraan : " << left << setw(21) << jenis_kendaraan[pilih - 1] << "|\n";
-    cout << "|Nomor Plat      : " << left << setw(27) << nomorPlat << "|\n";
-    cout << "|Jam Masuk       : " << left << setw(27) << jm_masuk << "|\n";
-    cout << "|Jam Keluar      : " << left << setw(27) << jm_keluar << "|\n";
-    cout << "-----------------------------------------------\n";
-    cout << "|Biaya Parkir    : Rp." << left << setw(24) <<biaya << "|\n";
-    cout << "-----------------------------------------------\n";
-    cout << "|Bayar           : " << left << setw(27) << uang << "|\n";
-    cout << "|Kembalian       : " << left << setw(27) << kembalian << "|\n";
-    cout << "-----------------------------------------------\n";
 }
 
 void menghitung_biaya(){
@@ -62,7 +58,22 @@ void menghitung_biaya(){
         kembalian = uang - biaya;
         tot_biaya += biaya;
 
-       struk_parkir();
+        dataParkir[jumlahParkir++] = {nomorPlat, jm_masuk, jm_keluar,biaya,uang,kembalian};
+
+        cout << "-----------------------------------------------\n";
+        cout << "|             Struk Karcis Parkir             |\n";
+        tanggal();
+        cout << "-----------------------------------------------\n";
+        cout << "|Jenis Kendaraan : " << left << setw(21) << jenis_kendaraan[pilih - 1] << "|\n";
+        cout << "|Nomor Plat      : " << left << setw(27) << nomorPlat << "|\n";
+        cout << "|Jam Masuk       : " << left << setw(27) << jm_masuk << "|\n";
+        cout << "|Jam Keluar      : " << left << setw(27) << jm_keluar << "|\n";
+        cout << "-----------------------------------------------\n";
+        cout << "|Biaya Parkir    : Rp." << left << setw(24) <<biaya << "|\n";
+        cout << "-----------------------------------------------\n";
+        cout << "|Bayar           : " << left << setw(27) << uang << "|\n";
+        cout << "|Kembalian       : " << left << setw(27) << kembalian << "|\n";
+        cout << "-----------------------------------------------\n";
 
         if(biaya > uang){
             cout<<"Uang Kurang\n";
@@ -82,8 +93,6 @@ void pembayaranKarcis(){
     cout<<"=========================================\n";
     cout<<"Pilih Kendaraan : ";
     cin >> pilih;
-
-    jumlahParkir++;
 
     // membuat percabangan untuk memilih jenis kendaraan
     switch (pilih) {
@@ -112,63 +121,98 @@ void pembayaranKarcis(){
             pembayaranKarcis();
     }
     menghitung_biaya();
-    
+
 }
 
 void pencarianNomorKendaraan(){
     string searchPlat;
     cout << "Masukkan Plat Kendaraan yang Dicari: ";
     cin >> searchPlat;
-    int h,j,ditemukan = 0; // deklarasi variable
 
-    for (h=0; h<jumlahParkir; h++){
-        if (nomorPlat == searchPlat){
-            ditemukan = 1;
-            
-            struk_parkir();
-
+    for (int i = 0; i < jumlahParkir; ++i){
+        if (dataParkir[i].nomorPlat.find(searchPlat) != string::npos){
+            cout << "-----------------------------------------------\n";
+            cout << "|             Struk Karcis Parkir             |\n";
+            tanggal();
+            cout << "-----------------------------------------------\n";
+            cout << "|Jenis Kendaraan : " << left << setw(21) << jenis_kendaraan[pilih - 1] << "|\n";
+            cout << "|Nomor Plat      : " << left << setw(27) << nomorPlat << "|\n";
+            cout << "|Jam Masuk       : " << left << setw(27) << jm_masuk << "|\n";
+            cout << "|Jam Keluar      : " << left << setw(27) << jm_keluar << "|\n";
+            cout << "-----------------------------------------------\n";
+            cout << "|Biaya Parkir    : Rp." << left << setw(24) <<biaya << "|\n";
+            cout << "-----------------------------------------------\n";
+            cout << "|Bayar           : " << left << setw(27) << uang << "|\n";
+            cout << "|Kembalian       : " << left << setw(27) << kembalian << "|\n";
+            cout << "-----------------------------------------------\n";
         }
-    }
-    if (ditemukan==0){
-        cout<<"Plat tidak ditemukan" << endl;
     }
 
 }
 
+void struct_parkir(){
+    for (int i = 0; i < jumlahParkir; ++i) {
+        cout << "-----------------------------------------------\n";
+        cout << "|             Struk Karcis Parkir             |\n";
+        tanggal();
+        cout << "-----------------------------------------------\n";
+        cout << "|Jenis Kendaraan : " << left << setw(21) << jenis_kendaraan[pilih - 1] << "|\n";
+        cout << "|Nomor Plat      : " << left << setw(27) << dataParkir[i].nomorPlat << "|\n";
+        cout << "|Jam Masuk       : " << left << setw(27) << dataParkir[i].jm_masuk << "|\n";
+        cout << "|Jam Keluar      : " << left << setw(27) << dataParkir[i].jm_keluar << "|\n";
+        cout << "-----------------------------------------------\n";
+        cout << "|Biaya Parkir    : Rp." << left << setw(24) <<dataParkir[i].biaya << "|\n";
+        cout << "-----------------------------------------------\n";
+        cout << "|Bayar           : " << left << setw(27) << dataParkir[i].uang << "|\n";
+        cout << "|Kembalian       : " << left << setw(27) << dataParkir[i].kembalian << "|\n";
+        cout << "-----------------------------------------------\n";
+    }
+}
+
+bool compareByTime(const Parkir &a, const Parkir &b) {
+    return a.jm_masuk < b.jm_masuk;
+}
+
+bool compareByPlat(const Parkir &a, const Parkir &b) {
+    return a.nomorPlat < b.nomorPlat;
+}
+
+
 void tampilkanDataParkir() {
     int pilihan;
-    cout << "Pilih Filter Pengurutan Data Parkir (1. Terbaru, 2. Terlama): ";
+    cout << "[1] Default \n";
+    cout << "[2] Waktu \n";
+    cout << "[3] Plat \n";
+    cout << "Pilih Filter Pengurutan Data Parkir : ";
     cin >> pilihan;
-  
-	//mengurutkan data parkir berdasarkan waktu selesai parkir
+
     switch (pilihan) {
-    case 1:
-        for(int i=0; i<jumlahParkir; i++) {
-            struk_parkir();
-        }
-
-        break;
-    case 2:
-        for(int i = jumlahParkir -1;i >= 0; i--){
-            struk_parkir();
-        } 
-
-        break;
-    default:
-        cout<<"Pilih Filter Pengurutan";
-        break;
+        case 1 :
+            struct_parkir();
+            break;
+        case 2:
+            sort(dataParkir, dataParkir + jumlahParkir, compareByTime);
+            struct_parkir();
+            break;
+        case 3:
+            sort(dataParkir, dataParkir + jumlahParkir, compareByPlat);
+            struct_parkir();
+            break;
+        default:
+            cout<<"Pilih Filter Pengurutan";
+            break;
     }
 
 }
 
 void totalhariini(){
     cout << "-----------------------------------------------\n";
-	cout << "|            Total Parkir Hari Ini            |\n";    
-    tanggal();                  
-	cout << "-----------------------------------------------\n";
-	cout << "|Motor : " << left << setw(37) << selc_motor << "|\n";
+    cout << "|            Total Parkir Hari Ini            |\n";
+    tanggal();
+    cout << "-----------------------------------------------\n";
+    cout << "|Motor : " << left << setw(37) << selc_motor << "|\n";
     cout << "|Mobil : " << left << setw(37) << selc_mobil << "|\n";
-    cout << "|Bus : " << left << setw(37) << selc_bus << "|\n";
+    cout << "|Bus : " << left << setw(39) << selc_bus << "|\n";
     cout << "|Truck : " << left << setw(37) << selc_truck << "|\n";
     cout << "|Total Parkir    : Rp." << left << setw(24) <<tot_biaya << "|\n";
     cout << "-----------------------------------------------\n";
@@ -212,6 +256,5 @@ int main(){
     } while (menu != 5);
 
     return 0;
-    
 
 }
