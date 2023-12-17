@@ -34,18 +34,22 @@ string getJenisKendaraanString(int jenisKendaraan) {
         case 3:
             return "Truk";
         case 4:
+            return "Bus";
+        case 5:
             break;
         default :
             cout << "Opsi Kendaraan tidak Valid\n";
     }
 }
 
+// membuat fungsi tanggal
 void tanggal(){
     time_t now = time(0);
     waktu = ctime(&now);
     cout << "|         " << waktu;
 }
 
+// membuat fungsi sistem parkir
 void menghitung_biaya(){
     cout << "Nomor Plat Kendaraan \t: ";
     cin >> nomorPlat;
@@ -95,43 +99,41 @@ void menghitung_biaya(){
 }
 
 // membuat function pembayaranKarcis
-void pembayaranKarcis(){
-    cout << "[1]Motor    \tRp.2000 perJam\n";
-    cout << "[2]Mobil \tRp.4000 perJam\n";
-    cout << "[3]Truk \tRp.6000 perJam\n";
-    cout << "[4]Bus \t\tRp.8000 perJam\n";
+void pembayaranKarcis() {
+    cout << "[1] Motor    \tRp.2000/Jam\n";
+    cout << "[2] Mobil    \tRp.4000/Jam\n";
+    cout << "[3] Truk     \tRp.6000/Jam\n";
+    cout << "[4] Bus      \tRp.8000/Jam\n";
     cout << "Masukan Jenis Kendaraan : ";
     cin >> jenisKendaraan;
 
-    switch (jenisKendaraan) {
-        case 1:
-            selc_motor += 1;
-            harga_kendaraan = 2000;
-            break;
-        case 2:
-            selc_mobil += 1;
-            harga_kendaraan = 4000;
-            break;
-        case 3:
-            selc_truck += 1;
-            harga_kendaraan = 6000;
-            break;
-        case 4:
-            selc_bus += 1;
-            harga_kendaraan = 8000;
-            break;
-        default :
-            cout << "Opsi Kendaraan tidak Valid\n";
+    if (jenisKendaraan == 1) {
+        selc_motor += 1;
+        harga_kendaraan = 2000;
+    } else if (jenisKendaraan == 2) {
+        selc_mobil += 1;
+        harga_kendaraan = 4000;
+    } else if (jenisKendaraan == 3) {
+        selc_truck += 1;
+        harga_kendaraan = 6000;
+    } else if (jenisKendaraan == 4) {
+        selc_bus += 1;
+        harga_kendaraan = 8000;
+    } else {
+        cout << "Opsi Kendaraan tidak Valid" << endl;
+        return;  // Keluar dari fungsi jika opsi tidak validssss
     }
 
     menghitung_biaya();
-
 }
+
 
 void pencarianNomorKendaraan(){
     string searchPlat;
     cout << "Masukkan Plat Kendaraan yang Dicari: ";
     cin >> searchPlat;
+
+    int platDitemukan = 0; // 0 menunjukkan plat tidak ditemukan
 
     for (int i = 0; i < jumlahParkir; ++i){
         if (dataParkir[i].nomorPlat.find(searchPlat) != string::npos){
@@ -151,7 +153,9 @@ void pencarianNomorKendaraan(){
             cout << "-----------------------------------------------\n";
         }
     }
-
+    if (platDitemukan == 0) {
+        cout << "Plat kendaraan tidak ditemukan!.\n";
+    }
 }
 
 void struct_parkir(){
@@ -184,10 +188,10 @@ bool compareByPlat(const Parkir &a, const Parkir &b) {
 
 void tampilkanDataParkir() {
     int pilihan;
-    cout << "[1] Default \n";
-    cout << "[2] Waktu \n";
-    cout << "[3] Plat \n";
-    cout << "Pilih Filter Pengurutan Data Parkir : ";
+    cout << "[1] Urutan Waktu \n";
+    cout << "[2] Waktu Parkir \n";
+    cout << "[3] Plat Nomor \n";
+    cout << "Pilih : ";
     cin >> pilihan;
 
     switch (pilihan) {
@@ -203,7 +207,7 @@ void tampilkanDataParkir() {
             struct_parkir();
             break;
         default:
-            cout<<"Pilih Filter Pengurutan";
+            cout<<"Pilihan anda tidak valid!";
             break;
     }
 
@@ -216,7 +220,7 @@ void totalhariini(){
     cout << "-----------------------------------------------\n";
     cout << "|Motor : " << left << setw(37) << selc_motor << "|\n";
     cout << "|Mobil : " << left << setw(37) << selc_mobil << "|\n";
-    cout << "|Bus : " << left << setw(39) << selc_bus << "|\n";
+    cout << "|Bus   : " << left << setw(39) << selc_bus << "|\n";
     cout << "|Truck : " << left << setw(37) << selc_truck << "|\n";
     cout << "|Total Parkir    : Rp." << left << setw(24) <<tot_biaya << "|\n";
     cout << "-----------------------------------------------\n";
@@ -228,11 +232,11 @@ int main(){
 
     do {
         cout << "\nMenu:\n";
-        cout << "1. Pembayaran Karcis Parkir\n";
-        cout << "2. Pencarian Nomor Kendaraan\n";
-        cout << "3. Tampilkan Data Parkir\n";
-        cout << "4. Total Parkir Hari Ini\n";
-        cout << "5. Keluar\n";
+        cout << "[1] Pembayaran Karcis Parkir\n";
+        cout << "[2] Pencarian Nomor Kendaraan\n";
+        cout << "[3] Tampilkan Data Parkir\n";
+        cout << "[4] Total Parkir Hari Ini\n";
+        cout << "[5] Keluar\n";
         cout << "\n";
         cout << "Pilih menu: ";
         cin >> menu;
@@ -254,7 +258,7 @@ int main(){
                 cout << "Terima kasih!\n";
                 break;
             default:
-                cout << "Pilihan tidak valid.\n";
+                cout << "Pilihan tidak valid!\n";
                 break;
         }
     } while (menu != 5);
