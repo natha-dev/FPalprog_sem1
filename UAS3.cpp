@@ -46,7 +46,7 @@ string getJenisKendaraanString(int jenisKendaraan) {
 void tanggal(){
     time_t now = time(0);
     waktu = ctime(&now);
-    cout << "|         " << waktu;
+    cout << "            " << waktu;
 }
 
 // membuat fungsi sistem parkir
@@ -222,7 +222,7 @@ void totalhariini(){
     cout << "-----------------------------------------------\n";
     cout << "|Motor : " << left << setw(37) << selc_motor << "|\n";
     cout << "|Mobil : " << left << setw(37) << selc_mobil << "|\n";
-    cout << "|Bus   : " << left << setw(39) << selc_bus << "|\n";
+    cout << "|Bus   : " << left << setw(37) << selc_bus << "|\n";
     cout << "|Truck : " << left << setw(37) << selc_truck << "|\n";
     cout << "|Total Parkir    : Rp." << left << setw(24) <<tot_biaya << "|\n";
     cout << "-----------------------------------------------\n";
