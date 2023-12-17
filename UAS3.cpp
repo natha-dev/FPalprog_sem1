@@ -137,6 +137,8 @@ void pencarianNomorKendaraan(){
 
     for (int i = 0; i < jumlahParkir; ++i){
         if (dataParkir[i].nomorPlat.find(searchPlat) != string::npos){
+            platDitemukan = 1;
+
             cout << "-----------------------------------------------\n";
             cout << "|             Struk Karcis Parkir             |\n";
             cout << "-----------------------------------------------\n";
@@ -188,8 +190,8 @@ bool compareByPlat(const Parkir &a, const Parkir &b) {
 
 void tampilkanDataParkir() {
     int pilihan;
-    cout << "[1] Urutan Waktu \n";
-    cout << "[2] Waktu Parkir \n";
+    cout << "[1] Default \n";
+    cout << "[2] Waktu Masuk Parkir \n";
     cout << "[3] Plat Nomor \n";
     cout << "Pilih : ";
     cin >> pilihan;
