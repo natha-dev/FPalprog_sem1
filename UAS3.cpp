@@ -92,7 +92,11 @@ void menghitung_biaya(){
             menghitung_biaya();
         }
 
-    } else {
+    }else if(jm_keluar > jm_masuk){
+        cout<<"Jam keluar tidak boleh lebih dari jam masuk\n";
+        menghitung_biaya();
+    }
+    else {
         cout<<"Masukan Waktu 1 - 24\n";
         menghitung_biaya();
     }
